@@ -197,7 +197,9 @@ internal class ScanSurfaceView : FrameLayout {
         if (imgDetectionPropsObj.isNotValidImage(approx)) {
             scanCanvasView.clearShape()
             cancelAutoCapture()
+            listener.scanSurfaceHideDetectedDocument()
         } else {
+            listener.scanSurfaceShowDetectedDocument()
             if (!isAutoCaptureScheduled) {
                 scheduleAutoCapture()
             }

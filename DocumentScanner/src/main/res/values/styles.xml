@@ -9,8 +9,16 @@
         <item name="android:textSize">@dimen/zdc_text_size_medium_small</item>
     </style>
 
+    <style name="ZdcTextView14sp.Bold">
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="ZdcTextView14sp.White">
         <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="ZdcTextView14sp.White.Bold">
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="ActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">

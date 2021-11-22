@@ -26,6 +26,8 @@ internal interface ScanSurfaceListener {
     fun scanSurfacePictureTaken()
     fun scanSurfaceShowProgress()
     fun scanSurfaceHideProgress()
+    fun scanSurfaceShowDetectedDocument()
+    fun scanSurfaceHideDetectedDocument()
     fun onError(error: DocumentScannerErrorModel)
 
     fun showFlash()

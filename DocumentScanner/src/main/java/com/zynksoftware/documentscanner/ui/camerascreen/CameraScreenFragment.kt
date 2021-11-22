@@ -23,6 +23,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -43,8 +44,12 @@ import java.io.FileNotFoundException
 
 internal class CameraScreenFragment: BaseFragment(), ScanSurfaceListener  {
 
+    private var manualModeTimerHandler: Handler? = null
+    private var isHoldInstructionVisible = false
+
     companion object {
         private const val GALLERY_REQUEST_CODE = 878
+        private const val MILLIS_UNTIL_MANUAL_MODE = 30000L // 30 secs
         private val TAG = CameraScreenFragment::class.simpleName
 
         fun newInstance(): CameraScreenFragment {
@@ -65,6 +70,18 @@ internal class CameraScreenFragment: BaseFragment(), ScanSurfaceListener  {
 
         checkForCameraPermissions()
         initListeners()
+        setupManualModeTimer()
+    }
+
+    private fun setupManualModeTimer(){
+        val handler = Handler()
+        val enableManualModeRunnable: Runnable = object : Runnable {
+            override fun run() {
+                cameraCaptureButton.show()
+            }
+        }
+        handler.postDelayed(enableManualModeRunnable, MILLIS_UNTIL_MANUAL_MODE)
+        manualModeTimerHandler = handler
     }
 
     override fun onDestroy() {
@@ -80,6 +97,11 @@ internal class CameraScreenFragment: BaseFragment(), ScanSurfaceListener  {
         scanSurfaceView.originalImageFile = getScanActivity().originalImageFile
     }
 
+    override fun onPause(){
+        manualModeTimerHandler?.removeCallbacksAndMessages(null)
+        super.onPause()
+    }
+
     private fun initListeners() {
         cameraCaptureButton.setOnClickListener {
             takePhoto()
@@ -89,21 +111,6 @@ internal class CameraScreenFragment: BaseFragment(), ScanSurfaceListener  {
         }
         flashButton.setOnClickListener {
             switchFlashState()
-        }
-        galleryButton.setOnClickListener {
-            checkForStoragePermissions()
-        }
-        autoButton.setOnClickListener {
-            toggleAutoManualButton()
-        }
-    }
-
-    private fun toggleAutoManualButton() {
-        scanSurfaceView.isAutoCaptureOn = !scanSurfaceView.isAutoCaptureOn
-        if (scanSurfaceView.isAutoCaptureOn) {
-            autoButton.text = getString(R.string.zdc_auto)
-        } else {
-            autoButton.text = getString(R.string.zdc_manual)
         }
     }
 
@@ -120,24 +127,6 @@ internal class CameraScreenFragment: BaseFragment(), ScanSurfaceListener  {
                     }
                     else -> {
                         onError(DocumentScannerErrorModel(DocumentScannerErrorModel.ErrorMessage.CAMERA_PERMISSION_REFUSED_GO_TO_SETTINGS))
-                    }
-                }
-            }
-    }
-
-    private fun checkForStoragePermissions() {
-        RxPermissions(this)
-            .requestEach(Manifest.permission.READ_EXTERNAL_STORAGE)
-            .subscribe { permission ->
-                when {
-                    permission.granted -> {
-                        selectImageFromGallery()
-                    }
-                    permission.shouldShowRequestPermissionRationale -> {
-                        onError(DocumentScannerErrorModel(DocumentScannerErrorModel.ErrorMessage.STORAGE_PERMISSION_REFUSED_WITHOUT_NEVER_ASK_AGAIN))
-                    }
-                    else -> {
-                        onError(DocumentScannerErrorModel(DocumentScannerErrorModel.ErrorMessage.STORAGE_PERMISSION_REFUSED_GO_TO_SETTINGS))
                     }
                 }
             }
@@ -169,6 +158,20 @@ internal class CameraScreenFragment: BaseFragment(), ScanSurfaceListener  {
 
     override fun hideFlash() {
         flashButton?.hide()
+    }
+
+    override fun scanSurfaceShowDetectedDocument() {
+        if(!isHoldInstructionVisible){
+            holdInstructions.show()
+            isHoldInstructionVisible = true
+        }
+    }
+
+    override fun scanSurfaceHideDetectedDocument() {
+        if(isHoldInstructionVisible){
+            holdInstructions.hide()
+            isHoldInstructionVisible = false
+        }
     }
 
     private fun selectImageFromGallery() {
@@ -218,11 +221,11 @@ internal class CameraScreenFragment: BaseFragment(), ScanSurfaceListener  {
     }
 
     override fun scanSurfaceShowProgress() {
-        showProgressBar()
+        progressBar.show()
     }
 
     override fun scanSurfaceHideProgress() {
-        hideProgressBar()
+        progressBar.hide()
     }
 
     override fun onError(error: DocumentScannerErrorModel) {

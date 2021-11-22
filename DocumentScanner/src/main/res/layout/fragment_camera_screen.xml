@@ -1,85 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.zynksoftware.documentscanner.ui.components.scansurface.ScanSurfaceView
         android:id="@+id/scanSurfaceView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/flashButton"
+        android:layout_width="@dimen/zdc_camera_button_dimens"
+        android:layout_height="@dimen/zdc_camera_button_dimens"
+        android:adjustViewBounds="true"
+        android:padding="@dimen/zdc_small_padding"
+        android:src="@drawable/zdc_flash_off"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
-        <RelativeLayout
-            android:id="@+id/topBar"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/zdc_top_bar_height"
-            android:background="@color/zdc_transparent_black">
+    <TextView
+        android:id="@+id/instructions"
+        style="@style/ZdcTextView14sp.White.Bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Position the document inside the frame"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/guideFrame"
+        app:layout_constraintEnd_toEndOf="@id/guideFrame"
+        app:layout_constraintStart_toStartOf="@id/guideFrame"/>
 
-            <ImageView
-                android:id="@+id/flashButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:adjustViewBounds="true"
-                android:padding="@dimen/zdc_small_padding"
-                android:src="@drawable/zdc_flash_off"
-                android:visibility="gone" />
+    <TextView
+        android:id="@+id/holdInstructions"
+        style="@style/ZdcTextView14sp.Bold"
+        android:textColor="@android:color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Document detected\n Hold still"
+        app:layout_constraintTop_toTopOf="@id/guideFrame"
+        app:layout_constraintBottom_toBottomOf="@id/guideFrame"
+        app:layout_constraintStart_toStartOf="@id/guideFrame"
+        app:layout_constraintEnd_toEndOf="@id/guideFrame"
+        android:visibility="invisible"
+        android:gravity="center"/>
 
-            <TextView
-                android:id="@+id/autoButton"
-                style="@style/ZdcTextView14sp.White"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:padding="@dimen/zdc_x_small_padding"
-                android:text="@string/zdc_auto" />
+    <View
+        android:id="@+id/cameraCaptureButton"
+        android:layout_width="@dimen/zdc_camera_button_dimens"
+        android:layout_height="@dimen/zdc_camera_button_dimens"
+        android:layout_marginBottom="@dimen/zdc_xxx_big_padding"
+        android:background="@drawable/camera_button_circle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible"/>
 
-        </RelativeLayout>
+    <TextView
+        android:id="@+id/cancelButton"
+        style="@style/ZdcTextView14sp.White"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/zdc_gallery_button_dimens"
+        android:layout_marginStart="@dimen/zdc_medium_padding"
+        android:layout_marginBottom="@dimen/zdc_medium_padding"
+        android:padding="@dimen/zdc_x_small_padding"
+        android:text="@string/zdc_cancel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <ImageView
-            android:id="@+id/galleryButton"
-            android:layout_width="@dimen/zdc_gallery_button_dimens"
-            android:layout_height="@dimen/zdc_gallery_button_dimens"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginEnd="@dimen/zdc_medium_padding"
-            android:layout_marginBottom="@dimen/zdc_medium_padding"
-            android:src="@drawable/zdc_gallery_icon" />
 
-        <View
-            android:id="@+id/cameraCaptureButton"
-            android:layout_width="@dimen/zdc_camera_button_dimens"
-            android:layout_height="@dimen/zdc_camera_button_dimens"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/zdc_xxx_big_padding"
-            android:background="@drawable/camera_button_circle" />
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/holdInstructions"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:indeterminateTint="@color/zdc_transparent_black"
+        android:visibility="gone"/>
 
-        <TextView
-            android:id="@+id/cancelButton"
-            style="@style/ZdcTextView14sp.White"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/zdc_gallery_button_dimens"
-            android:layout_alignStart="@+id/cameraCaptureButton"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="@dimen/zdc_medium_padding"
-            android:layout_marginBottom="@dimen/zdc_medium_padding"
-            android:gravity="center"
-            android:padding="@dimen/zdc_x_small_padding"
-            android:text="@string/zdc_cancel" />
+    <View
+        android:id="@+id/guideFrame"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/flashButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/cameraCaptureButton"
+        app:layout_constraintHeight_percent=".7"
+        app:layout_constraintWidth_percent=".7"
+        android:background="@drawable/scan_guide" />
 
-        <com.zynksoftware.documentscanner.ui.components.ProgressView
-            android:id="@+id/progressLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"/>
-
-    </RelativeLayout>
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
