@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="zdc_cancel">Stornieren</string>
+    <string name="zdc_auto">Auto</string>
+    <string name="zdc_manual">Manuell</string>
+    <string name="zdc_position_the_document">Positionieren Sie das Dokument innerhalb des Rahmens</string>
+    <string name="zdc_document_detected">Dokument erkannt\n Still halten</string>
+</resources>
