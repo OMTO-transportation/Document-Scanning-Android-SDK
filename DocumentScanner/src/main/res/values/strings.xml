@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="zdc_cancel">Cancel</string>
     <string name="zdc_auto">Auto</string>
     <string name="zdc_manual">Manual</string>
+    <string name="zdc_position_the_document">Position the document inside the frame</string>
+    <string name="zdc_document_detected">Document detected\n Hold still</string>
 </resources>
